@@ -65,8 +65,12 @@ public class BungeeCordListener extends AuthenticListeners<BungeeCordLibreLogin,
                     event.setCancelled(true);
                     event.setCancelReason(plugin.getSerializer().serialize(result.message()));
                 }
-                case FORCE_ONLINE -> event.getConnection().setOnlineMode(true);
-                case FORCE_OFFLINE -> event.getConnection().setOnlineMode(false);
+                case FORCE_ONLINE -> {
+                    if (!event.getConnection().isOnlineMode()) event.getConnection().setOnlineMode(true);
+                }
+                case FORCE_OFFLINE -> {
+                    if (event.getConnection().isOnlineMode()) event.getConnection().setOnlineMode(false);
+                }
             }
         });
     }
