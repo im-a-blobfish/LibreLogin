@@ -106,6 +106,26 @@ public class BungeeCordListener extends AuthenticListeners<BungeeCordLibreLogin,
         var profile = plugin.getDatabaseProvider().getByName(event.getConnection().getName());
         PendingConnection connection = event.getConnection();
 
+        // START OF EAGLER ONLY STUFF
+
+        Class<?> clazz = connection.getClass();
+        if (clazz.getSimpleName().equals("EaglerInitialHandler")){
+            try {
+                Field fieldUUID = clazz.getDeclaredField("playerUUID");
+                Field fieldRewriteID = clazz.getDeclaredField("playerUUIDRewrite");
+                if (profile.getUuid().equals(fieldUUID.get(connection)) && profile.getUuid().equals(fieldRewriteID.get(connection))){
+                    return;
+                }
+                event.setCancelled(true);
+                return;
+            } catch (Exception e){
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        // END OF EAGLER ONLY STUFF
+
         try {
             setField(connection, "uniqueId", profile.getUuid(), true);
             setField(connection, "rewriteId", profile.getUuid(), false);
