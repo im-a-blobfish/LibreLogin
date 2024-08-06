@@ -113,6 +113,8 @@ public class BungeeCordListener extends AuthenticListeners<BungeeCordLibreLogin,
             try {
                 Field fieldUUID = clazz.getDeclaredField("playerUUID");
                 Field fieldRewriteID = clazz.getDeclaredField("playerUUIDRewrite");
+                fieldUUID.setAccessible(true);
+                fieldRewriteID.setAccessible(true);
                 if (profile.getUuid().equals(fieldUUID.get(connection)) && profile.getUuid().equals(fieldRewriteID.get(connection))){
                     return;
                 }
